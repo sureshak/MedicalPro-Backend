@@ -1,20 +1,21 @@
 var express = require('express');
 var router = express.Router();
-var http = require('http')
-var con = require('../config/index');
+var http = require('http');
+const importFresh = require('import-fresh');
 var mysql  = require('mysql');
+var auth = require('../config/auth');
+
+router.use(auth);
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  var user = {
-    "user4" : {
-       "name" : "mohit",
-       "password" : "password4",
-       "profession" : "teacher",
-       "id": 5
-    }
- }
-  res.send(user);
+  var con = importFresh('../config/index');
+  con.query("select * from appointment",function(err, result) {
+    if (err) throw err;
+      console.log(result);
+      res.send(result);
+  }); 
+  con.end();
 });
 
 router.post('/' , function(req,res){
