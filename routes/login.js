@@ -15,20 +15,28 @@ router.post('/', function(req, res) {
             if (results.length > 0) {
 				//req.session.loggedin = true;
                 //req.session.username = username;
-                var token=cryptoRandomString({length: 10});
-                console.log(token);
-                var post  = {token: token, user_id: results[0].user_id};
-                con.query("INSERT INTO usersession SET ?", post ,function(err, result) {
+                var userid=[results[0].user_id];
+                con.query("Update usersession SET is_active=0 where user_id = ?", userid ,function(err, result) {
                     if (err) throw err;
                       console.log(result);
-                      res.send({
-                        "code":200,
-                        "usermessage":"login successfull",
-                        "token":token
-                    });
-                    con.end();
-                    res.end();
+                      var token=cryptoRandomString({length: 10});
+                      console.log(token);
+                      var post  = {token: token, user_id: results[0].user_id};
+                      con.query("INSERT INTO usersession SET ?", post ,function(err, result) {
+                          if (err) throw err;
+                            console.log(result);
+                            res.send({
+                              "code":200,
+                              "usermessage":"login successfull",
+                              "token":token
+                          });
+                          con.end();
+                          res.end();
+                        });      
                   });   
+
+
+                  
 			} else {
 				res.send({
                     "code":400,
