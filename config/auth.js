@@ -1,7 +1,6 @@
 const importFresh = require('import-fresh');
 var auth = function(req, res, next){
     var con = importFresh('../config/index');
-
     console.log('inside auth');
     //console.log("reqqqqqqqqqq   ",req);
     console.log("auth token : ",req.headers.authtoken);
