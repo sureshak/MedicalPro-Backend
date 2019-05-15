@@ -19,7 +19,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/' , function(req,res){
-  console.log("req : ",req);
+  console.log("req : ",req.body);
   var name = req.body.name;
   var sex = req.body.sex;
   var age = req.body.age;
@@ -30,10 +30,20 @@ router.post('/' , function(req,res){
   console.log(post);
   // var sql = "INSERT INTO appointment (name, sex,age,phone,description,time_slot) VALUES ('"+name+"','"+sex+"',"+age+","+phone+",'"+description+"','"+slot+"')";
   // console.log(sql);
+  var con = importFresh('../config/index');
   con.query("INSERT INTO appointment SET ?", post ,function(err, result) {
-    if (err) throw err;
+    if (err){
+      console.log(err);
+      res.send({
+        "code":400,
+        "usermessage":"Error while booking your appointment"
+      });
+    };
       console.log(result);
-      res.send(result);
+      res.send({
+        "code":200,
+        "usermessage":"You have successfully booked your appointment"
+      }); 
   }); 
   con.end();
 });

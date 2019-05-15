@@ -8,6 +8,7 @@ var auth = function(req, res, next){
     con.query("select * from usersession where token = ? and is_active = 1 ", [req.headers.authtoken] ,function(err, results) {
         if (err) throw err;
         if (results.length > 0) {
+            console.log("Auth successfull");
             next();
         }else{
             res.statusCode = 401;
@@ -18,7 +19,6 @@ var auth = function(req, res, next){
             res.end();
             con.end();
         }
-          
       });
 }
 
